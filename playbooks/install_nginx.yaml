@@ -1,0 +1,21 @@
+- name: Configure Webserver with NGINX
+  hosts: test_b
+  become: True
+  tasks:
+    - name: Install NGINX
+      apt: name=nginx update_cache=yes
+
+    - name: Copy NGINX Config File
+      copy: src=~/ansible_tutorial/files/nginx.conf dest=/etc/nginx/sites-available/default
+
+    - name: Enable Configuration
+      file: >
+        dest=/etc/nginx/sites-enabled/default
+        src=/etc/nginx/sites-available/default
+        state=link
+
+    - name: Copy index.html
+      template: src=~/ansible_tutorial/files/index.html.j2 dest=/usr/share/nginx/html/index.html mode=0644
+
+    - name: Restart NGINX Service
+      service: name=nginx state=restarted
