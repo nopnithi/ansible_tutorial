@@ -1,0 +1,7 @@
+- name: call group variable and return to a new variable
+  hosts: test_a
+  tasks:
+    - name: run echo command and capture output to myoutputvar
+      command: "echo {{ dns.primary }}"
+      register: myoutputvar
+    - debug: var=myoutputvar
